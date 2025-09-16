@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOX - Découverte • Opportunité • Xpertise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(45deg, #0a0a0a, #1a0d2e, #2d1b4e);
+            color: #00ff88;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Effet de fond animé */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 255, 198, 0.2) 0%, transparent 50%);
+            animation: psychedelicMove 20s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        @keyframes psychedelicMove {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(0.9); }
+            75% { transform: rotate(270deg) scale(1.1); }
+        }
+
+        /* Navigation - CACHÉE AU DÉBUT */
+        nav {
+            position: fixed;
+            top: -100px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff88;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: top 0.8s ease;
+        }
+
+        nav.visible {
+            top: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #00ff88;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            border: 1px solid #ff0088;
+            color: #ff0088;
+            box-shadow: 0 0 20px rgba(255, 0, 136, 0.5);
+            text-shadow: 0 0 10px rgba(255, 0, 136, 0.8);
+        }
+
+        /* Bouton retour galaxie - NOUVEAU */
+        .galaxy-return {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle, #ff0088 0%, #0088ff 50%, #00ff88 100%);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: galaxyRotate 6s linear infinite;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px rgba(255, 0, 136, 0.6);
+        }
+
+        .galaxy-return.visible {
+            display: flex;
+        }
+
+        .galaxy-return:hover {
+            transform: translateY(-50%) scale(1.3);
+            box-shadow: 0 0 50px rgba(255, 0, 136, 1);
+        }
+
+        @keyframes galaxyRotate {
+            0% { 
+                background: radial-gradient(circle, #ff0088 0%, #0088ff 50%, #00ff88 100%);
+                transform: translateY(-50%) rotate(0deg);
+            }
+            33% { 
+                background: radial-gradient(circle, #0088ff 0%, #00ff88 50%, #ff0088 100%);
+                transform: translateY(-50%) rotate(120deg);
+            }
+            66% { 
+                background: radial-gradient(circle, #00ff88 0%, #ff0088 50%, #0088ff 100%);
+                transform: translateY(-50%) rotate(240deg);
+            }
+            100% { 
+                background: radial-gradient(circle, #ff0088 0%, #0088ff 50%, #00ff88 100%);
+                transform: translateY(-50%) rotate(360deg);
+            }
+        }
+
+        /* PAGE D'ACCUEIL SÉPARÉE */
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .landing-page.hidden {
+            display: none;
+        }
+
+        .dox-title {
+            font-size: 10rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ff88, #ff0088, #0088ff, #ffaa00);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite, titlePulse 2s ease-in-out infinite;
+            text-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
+            margin-bottom: 2rem;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            font-size: 2.5rem;
+            color: #00ff88;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 136, 0.8); }
+            50% { text-shadow: 0 0 40px rgba(0, 255, 136, 1), 0 0 60px rgba(0, 255, 136, 0.6); }
+        }
+
+        .welcome-text {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            max-width: 900px;
+            color: #cccccc;
+            margin-bottom: 4rem;
+            animation: fadeIn 2s ease-out 1s both;
+        }
+
+        .enter-button {
+            background: linear-gradient(45deg, #00ff88, #ff0088, #0088ff);
+            background-size: 300% 300%;
+            color: white;
+            border: none;
+            padding: 2rem 4rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 15px;
+            letter-spacing: 3px;
+            transition: all 0.4s ease;
+            animation: buttonGlow 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .enter-button:hover::before {
+            left: 100%;
+        }
+
+        .enter-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(0, 255, 136, 0.6);
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* CONTENU PRINCIPAL - CACHÉ AU DÉBUT */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.visible {
+            display: block;
+        }
+
+        .section {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .content-section h1 {
+            font-size: 3.5rem;
+            color: #ff0088;
+            margin-bottom: 3rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(255, 0, 136, 0.6);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .content-card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ff88, #ff0088, #0088ff, #ffaa00);
+            border-radius: 15px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
+        }
+
+        .content-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 255, 136, 0.4);
+        }
+
+        .content-card h3 {
+            color: #ffaa00;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .content-card p {
+            color: #cccccc;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        /* SECTION CONTACT REDESIGNÉE */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .contact-form {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #00ff88;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff0088;
+            box-shadow: 0 0 20px rgba(255, 0, 136, 0.3);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #00ff88, #ff0088);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        /* LIENS SOCIAUX */
+        .social-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #ff0088;
+        }
+
+        .social-section h3 {
+            color: #ff0088;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #cccccc;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 136, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .social-link:hover::before {
+            left: 100%;
+        }
+
+        .social-link:hover {
+            border-color: #ff0088;
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(255, 0, 136, 0.3);
+            color: #ff0088;
+        }
+
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            margin-right: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ff88, #ff0088);
+            flex-shrink: 0;
+        }
+
+        .social-info h4 {
+            color: #ffaa00;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .social-info p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Section Téléchargements - NOUVEAU */
+        .download-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .download-category {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-category::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ff88, #ff0088, #0088ff, #ffaa00);
+            border-radius: 20px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .download-category:hover::before {
+            opacity: 0.3;
+        }
+
+        .download-category h3 {
+            color: #ff0088;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .download-item {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #0088ff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .download-item:hover {
+            transform: translateX(10px);
+            border-color: #ff0088;
+            box-shadow: 0 5px 20px rgba(255, 0, 136, 0.3);
+        }
+
+        .download-item h4 {
+            color: #ffaa00;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-item p {
+            color: #cccccc;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .download-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .download-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #00ff88, #0088ff);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 136, 255, 0.4);
+            background: linear-gradient(45deg, #0088ff, #ff0088);
+        }
+
+        .download-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dox-title {
+                font-size: 5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.5rem;
+                letter-spacing: 3px;
+            }
+
+            .enter-button {
+                padding: 1.5rem 2rem;
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .galaxy-return {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE D'ACCUEIL SÉPARÉE -->
+    <div class="landing-page" id="landingPage">
+        <div class="dox-title">DOX</div>
+        <div class="subtitle">Découverte • Opportunité • Xpertise</div>
+        <div class="welcome-text">
+            <p>Bienvenue dans l'univers DOX, où la technologie rencontre la créativité dans une fusion futuriste. 
+            Explorez mes créations, découvrez mes streams gaming, vibrez sur mes mixs techno et plongez dans 
+            un monde où chaque pixel raconte une histoire.</p>
+        </div>
+        <button class="enter-button" onclick="enterSite()">🚀 ENTRER DANS L'UNIVERS DOX</button>
+    </div>
+
+    <!-- BOUTON RETOUR GALAXIE (caché au début) -->
+    <div class="galaxy-return" id="galaxyReturn" onclick="returnToLanding()" title="Retour à l'accueil DOX">
+        🌌
+    </div>
+
+    <!-- NAVIGATION (cachée au début) -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#" data-section="presentation" class="active">📋 Présentation</a></li>
+                <li><a href="#" data-section="gaming">🎮 Découverte Gaming</a></li>
+                <li><a href="#" data-section="mixs">🎵 Mixs</a></li>
+                <li><a href="#" data-section="creations">💼 Créations Pro</a></li>
+                <li><a href="#" data-section="ecommerce">🛒 E-commerce</a></li>
+                <li><a href="#" data-section="downloads">📥 Téléchargements</a></li>
+                <li><a href="#" data-section="contact">📞 Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- CONTENU PRINCIPAL (caché au début) -->
+    <div class="main-content" id="mainContent">
+        <!-- SECTION PRÉSENTATION - NOUVEAU -->
+        <section id="presentation" class="section active">
+            <div class="content-section">
+                <h1>🎯 PRÉSENTATION DOX</h1>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🚀 Qui suis-je ?</h3>
+                        <p>Passionné de technologie et de créativité, je suis DOX - un créateur digital qui fusionne l'univers du gaming, de la musique électronique et du développement web. Mon objectif : créer des expériences uniques qui marquent les esprits et repoussent les limites du possible.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🎨 Ma Vision Créative</h3>
+                        <p>L'art numérique n'a pas de limites. Entre les pixels des jeux vidéo, les fréquences de la techno psychédélique et les lignes de code innovantes, je construis un pont entre le monde réel et les dimensions virtuelles les plus captivantes et immersives.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>⚡ L'Univers DOX</h3>
+                        <p>DOX représente parfaitement ma philosophie : la <strong>Découverte</strong> perpétuelle de nouveaux horizons gaming, l'<strong>Opportunité</strong> de collaborations créatives innovantes, et l'<strong>Xpertise</strong> technique pour donner vie à vos projets les plus ambitieux.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🎮 Gaming Passion</h3>
+                        <p>Streamer et testeur de jeux depuis plusieurs années, je partage ma passion pour les univers virtuels avec une communauté grandissante de gamers passionnés. Des RPG épiques aux FPS compétitifs, chaque game a son histoire unique à raconter.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🎵 Sound Designer</h3>
+                        <p>Producteur de musique techno avec une approche psychédélique unique inspirée de l'univers GOA. Mes compositions fusionnent les sonorités futuristes avec des influences traditionnelles pour créer des voyages sonores immersifs et transcendants.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>💻 Développeur Créatif</h3>
+                        <p>Développeur full-stack spécialisé dans les expériences web interactives et le game design innovant. Chaque ligne de code est soigneusement pensée pour créer de l'émotion, de l'engagement utilisateur et des souvenirs durables.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Gaming -->
+        <section id="gaming" class="section">
+            <div class="content-section">
+                <h1>🎮 Découverte Gaming</h1>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🔴 Streams Live</h3>
+                        <p>Rejoignez-moi en live pour des sessions gaming épiques. Des aventures RPG aux compétitions esport, explorons ensemble les univers virtuels les plus captivants de l'industrie du jeu vidéo.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🏆 Gameplay & Reviews</h3>
+                        <p>Découvrez mes analyses détaillées et tests des derniers jeux. Reviews complètes, guides de stratégie avancés et conseils professionnels pour améliorer votre niveau de jeu.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>👥 Communauté Gaming</h3>
+                        <p>Une communauté passionnée de gamers où partager vos expériences, organiser des parties multijoueur exclusives et échanger des tips entre joueurs expérimentés.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Mixs -->
+        <section id="mixs" class="section">
+            <div class="content-section">
+                <h1>🎵 Mixs Techno</h1>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🌊 Progressive Techno</h3>
+                        <p>Des voyages sonores profonds mêlant beats hypnotiques et mélodies évolutives. Laissez-vous emporter par des progressions musicales qui transcendent la réalité ordinaire.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>⚡ Hard Techno</h3>
+                        <p>L'énergie brute de la techno industrielle dans toute sa splendeur. Des basses puissantes et des kicks percutants pour faire vibrer vos sessions les plus intenses.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🌌 Fusion Psychédélique</h3>
+                        <p>Fusion unique entre techno moderne et influences GOA traditionnelles. Des textures sonores complexes qui stimulent l'imaginaire et transportent vers d'autres dimensions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Créations Pro -->
+        <section id="creations" class="section">
+            <div class="content-section">
+                <h1>💼 Créations Professionnelles</h1>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🎮 Développement de Jeux</h3>
+                        <p>Conception et développement de jeux vidéo innovants et immersifs. Du game design créatif au code optimisé, création d'expériences interactives uniques et mémorables.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🌐 Sites Web Futuristes</h3>
+                        <p>Création de sites web modernes et entièrement responsives. Design futuriste sur mesure, expérience utilisateur optimale et technologies de pointe pour votre présence digitale.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🎛️ Production Audio Pro</h3>
+                        <p>Services de mixage et mastering professionnel de haute qualité. Production de tracks originales et remixes sur mesure pour vos projets artistiques ou commerciaux.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section E-commerce -->
+        <section id="ecommerce" class="section">
+            <div class="content-section">
+                <h1>🛒 E-commerce</h1>
+                <div class="content-grid">
+                    <div class="content-card">
+                        <h3>🎵 Tracks Exclusives</h3>
+                        <p>Téléchargez mes productions musicales originales en haute qualité studio. Formats WAV, MP3 et stems séparés disponibles pour vos projets DJ ou personnels.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🎮 Assets Gaming</h3>
+                        <p>Ressources et outils professionnels pour le développement de jeux. Sprites haute définition, textures optimisées, sons et scripts pour enrichir vos créations gaming.</p>
+                    </div>
+                    <div class="content-card">
+                        <h3>🎨 Templates & Designs</h3>
+                        <p>Templates de sites web futuristes et designs graphiques uniques. Donnez une identité visuelle marquante et professionnelle à tous vos projets digitaux.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Téléchargements - NOUVEAU -->
+        <section id="downloads" class="section">
+            <div class="content-section">
+                <h1>📥 TÉLÉCHARGEMENTS GRATUITS</h1>
+                <div class="download-categories">
+                    
+                    <div class="download-category">
+                        <h3>🎵 Musique & Audio</h3>
+                        
+                        <div class="download-item">
+                            <h4>🎧 Mix Psychédélique "Cosmic Journey"</h4>
+                            <p>Un voyage sonore de 60 minutes mêlant techno progressive et influences GOA. Perfect pour vos sessions créatives ou moments de détente.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">MP3 320kbps</span>
+                                    <span class="meta-item">85 MB</span>
+                                    <span class="meta-item">60 min</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+
+                        <div class="download-item">
+                            <h4>🎹 Pack de Samples Techno</h4>
+                            <p>Collection de 50 samples originaux : kicks, hihats, basses et mélodies. Parfait pour vos productions electronic.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">WAV 24bit</span>
+                                    <span class="meta-item">150 MB</span>
+                                    <span class="meta-item">50 samples</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+
+                        <div class="download-item">
+                            <h4>🎚️ Preset Pack pour Synthesizers</h4>
+                            <p>20 presets uniques pour Serum et Massive, inspirés de l'univers cyberpunk et de la techno underground.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">Serum + Massive</span>
+                                    <span class="meta-item">5 MB</span>
+                                    <span class="meta-item">20 presets</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="download-category">
+                        <h3>🎮 Gaming & Apps</h3>
+                        
+                        <div class="download-item">
+                            <h4>👾 DOX Runner - Mini Game</h4>
+                            <p>Jeu de plateforme rétro avec une esthétique cyberpunk. Courez, sautez et survivez dans un monde numérique hostile !</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">Windows/Mac</span>
+                                    <span class="meta-item">45 MB</span>
+                                    <span class="meta-item">v1.2</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+
+                        <div class="download-item">
+                            <h4>🛠️ DOX Audio Visualizer</h4>
+                            <p>Application desktop pour créer des visualisations audio en temps réel. Perfect pour vos streams ou performances live.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">Windows</span>
+                                    <span class="meta-item">120 MB</span>
+                                    <span class="meta-item">Beta 0.9</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+
+                        <div class="download-item">
+                            <h4>📱 DOX Mobile Companion</h4>
+                            <p>App mobile pour contrôler vos sessions gaming et music. Interface futuriste avec widgets personnalisables.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">Android APK</span>
+                                    <span class="meta-item">25 MB</span>
+                                    <span class="meta-item">v2.1</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="download-category">
+                        <h3>💻 Outils & Resources</h3>
+                        
+                        <div class="download-item">
+                            <h4>🎨 DOX UI Kit Futuriste</h4>
+                            <p>Pack complet d'éléments UI dans le style DOX : boutons, icônes, textures et palettes de couleurs néon.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">PSD + PNG</span>
+                                    <span class="meta-item">200 MB</span>
+                                    <span class="meta-item">100+ éléments</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+
+                        <div class="download-item">
+                            <h4>🌐 Template Site Web DOX</h4>
+                            <p>Template HTML/CSS/JS complet dans l'esprit futuriste DOX. Responsive et entièrement personnalisable.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">HTML/CSS/JS</span>
+                                    <span class="meta-item">15 MB</span>
+                                    <span class="meta-item">5 pages</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+
+                        <div class="download-item">
+                            <h4>🎯 Wallpaper Pack DOX</h4>
+                            <p>Collection de 15 wallpapers haute résolution avec l'esthétique DOX : cyberpunk, néon et géométrie fractale.</p>
+                            <div class="download-info">
+                                <div class="download-meta">
+                                    <span class="meta-item">4K PNG</span>
+                                    <span class="meta-item">180 MB</span>
+                                    <span class="meta-item">15 images</span>
+                                </div>
+                                <a href="#" class="download-btn" onclick="alert('Téléchargement lancé !')">⬇️ Télécharger</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Contact -->
+        <section id="contact" class="section">
+            <div class="content-section">
+                <h1>📞 Contact & Réseaux</h1>
+                <div class="contact-container">
+                    <div class="contact-form">
+                        <form>
+                            <div class="form-group">
+                                <label for="name">Nom Complet</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Adresse Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Sujet</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Votre Message</label>
+                                <textarea id="message" name="message" rows="6" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="submit-btn">📨 Envoyer le Message</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="social-section">
+                        <h3>🌐 Retrouvez-moi</h3>
+                        <div class="social-links">
+                            <a href="mailto:dox.universe@gmail.com" class="social-link">
+                                <div class="social-icon">📧</div>
+                                <div class="social-info">
+                                    <h4>Email Direct</h4>
+                                    <p>dox.universe@gmail.com</p>
+                                </div>
+                            </a>
+                            
+                            <a href="https://discord.gg/doxuniverse" target="_blank" class="social-link">
+                                <div class="social-icon">🎮</div>
+                                <div class="social-info">
+                                    <h4>Discord</h4>
+                                    <p>Rejoignez la communauté DOX</p>
+                                </div>
+                            </a>
+                            
+                            <a href="https://twitch.tv/dox_gaming" target="_blank" class="social-link">
+                                <div class="social-icon">🟣</div>
+                                <div class="social-info">
+                                    <h4>Twitch</h4>
+                                    <p>Suivez mes streams gaming live</p>
+                                </div>
+                            </a>
+                            
+                            <a href="https://youtube.com/@DOXUniverse" target="_blank" class="social-link">
+                                <div class="social-icon">📺</div>
+                                <div class="social-info">
+                                    <h4>YouTube</h4>
+                                    <p>Découvrez mes créations vidéo</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Fonction pour entrer dans le site depuis l'accueil
+        function enterSite() {
+            const landingPage = document.getElementById('landingPage');
+            const navbar = document.getElementById('navbar');
+            const mainContent = document.getElementById('mainContent');
+            const galaxyReturn = document.getElementById('galaxyReturn');
+            
+            // Animation de sortie de la landing page
+            landingPage.style.opacity = '0';
+            landingPage.style.transform = 'scale(0.8)';
+            landingPage.style.transition = 'all 0.8s ease';
+            
+            setTimeout(() => {
+                landingPage.classList.add('hidden');
+                navbar.classList.add('visible');
+                mainContent.classList.add('visible');
+                galaxyReturn.classList.add('visible');
+            }, 800);
+        }
+
+        // Fonction pour retourner à l'accueil - NOUVEAU
+        function returnToLanding() {
+            const landingPage = document.getElementById('landingPage');
+            const navbar = document.getElementById('navbar');
+            const mainContent = document.getElementById('mainContent');
+            const galaxyReturn = document.getElementById('galaxyReturn');
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            // Cacher le contenu principal avec animation
+            navbar.classList.remove('visible');
+            mainContent.classList.remove('visible');
+            galaxyReturn.classList.remove('visible');
+            
+            // Réinitialiser la navigation sur "Présentation"
+            navLinks.forEach(l => l.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            document.querySelector('[data-section="presentation"]').classList.add('active');
+            document.getElementById('presentation').classList.add('active');
+            
+            // Réafficher la landing page avec animation
+            setTimeout(() => {
+                landingPage.classList.remove('hidden');
+                landingPage.style.opacity = '1';
+                landingPage.style.transform = 'scale(1)';
+                landingPage.style.transition = 'all 0.8s ease';
+            }, 300);
+        }
+
+        // Navigation entre les sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show target section
+                    const targetSection = document.getElementById(this.dataset.section);
+                    targetSection.classList.add('active');
+                });
+            });
+
+            // Form submission
+            document.querySelector('.contact-form form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('✅ Message envoyé avec succès ! Je vous répondrai très bientôt.');
+                this.reset();
+            });
+        });
+
+        // Effet de particules amélioré
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 4 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+            particle.style.borderRadius = '50%';
+            particle.style.top = '100vh';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.pointerEvents = 'none';
+            particle.style.animation = `particleFloat ${Math.random() * 10 + 15}s linear infinite`;
+            particle.style.zIndex = '-1';
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.remove();
+                }
+            }, 25000);
+        }
+
+        // CSS pour l'animation des particules
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFloat {
+                0% { 
+                    transform: translateY(0) rotate(0deg); 
+                    opacity: 1; 
+                }
+                100% { 
+                    transform: translateY(-120vh) rotate(720deg); 
+                    opacity: 0; 
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Créer des particules régulièrement
+        setInterval(createParticle, 3000);
+    </script>
+</body>
+</html>
